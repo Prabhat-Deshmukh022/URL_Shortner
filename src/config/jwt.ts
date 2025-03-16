@@ -15,7 +15,15 @@ function generateToken(userId: string): string {
     }
 
     //@ts-ignore
-    return jwt.sign({ userId }, secret as string, { expiresIn: expiry });
+    return jwt.sign(
+        { 
+            userId 
+        }, 
+        secret as string, 
+        { 
+            expiresIn: expiry,
+            jwtid: process.env.JWT_ID
+        });
 }
 
 export {generateToken}

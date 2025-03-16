@@ -39,4 +39,12 @@ async function verifyPassword(password:string,userId:string){
     return bcrypt.compareSync(password,user.password as string);
 }
 
-export {createUser,findUserByEmail,verifyPassword}
+async function findUserById(userId:string){
+    return await prisma.user.findUnique({
+        where:{
+            id:userId
+        }
+    })
+}
+
+export { createUser,findUserByEmail,verifyPassword,findUserById }

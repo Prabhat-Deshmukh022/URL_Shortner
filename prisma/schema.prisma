@@ -23,7 +23,9 @@ model User {
 model Url{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   originalUrl String
-  shortenedUrl String
+  shortenedUrl String @unique
+  expiresIn DateTime?
+  alias String? @unique
   user User?   @relation(fields: [userId], references: [id]) // Link to user
   userId String? @db.ObjectId
   clicks Click[]

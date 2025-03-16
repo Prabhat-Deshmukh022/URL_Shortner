@@ -15,4 +15,10 @@ const userValidationSchema = z.object(
     }
 )
 
-export {userValidationSchema}
+const urlValidationSchema = z.object({
+        originalUrl:z.string().nonempty().url(),
+        alias:z.string()
+    }
+)
+
+export { userValidationSchema,urlValidationSchema }
