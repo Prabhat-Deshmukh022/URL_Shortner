@@ -1,10 +1,8 @@
 import type { Context } from "hono";
 import { urlValidationSchema } from "../util/validation.ts";
 import { createUrl, findUrlByAlias } from "../service/url.services.ts";
-import { prisma } from "../config/prisma.ts";
 import { generateShortUrl } from "../util/generateShortUrl.ts";
-
-const domain = "domain"
+import { domain } from "../constants.ts";
 
 async function produceShortUrl(c:Context){
     const userId = c.get("userId")
@@ -23,10 +21,11 @@ async function produceShortUrl(c:Context){
         return c.json({message:`Invalid url!`},401)
     }
 
-    const { originalUrl,alias } = check.data
+    const { originalUrl,alias,regionBasedUrls,timeBasedUrls,abtestingUrls } = check.data
     let shortenedUrl=""
+    let code=""
 
-    if(alias.length!==0){
+    if(alias && alias?.length!==0){
         const checkIfAliasExists = await findUrlByAlias(alias)
         
         if(checkIfAliasExists){
@@ -38,13 +37,13 @@ async function produceShortUrl(c:Context){
 
     }
     else{
-        const code = generateShortUrl()
+        code = generateShortUrl()
 
         shortenedUrl = `https://${domain}/${code}`
 
     }
 
-    const urlCreated = await createUrl(originalUrl,shortenedUrl,userId,alias || undefined)
+    const urlCreated = await createUrl(originalUrl,code,userId,alias || undefined,regionBasedUrls,timeBasedUrls,abtestingUrls)
 
     if(!urlCreated){
         console.log(`Error creating short url!`);

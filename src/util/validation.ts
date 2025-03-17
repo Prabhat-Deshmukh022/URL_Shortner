@@ -15,9 +15,38 @@ const userValidationSchema = z.object(
     }
 )
 
+const urlSchema = z.string().nonempty().url()
+
+const regionBasedUrlSchema = z.record(z.string().min(2).max(5),urlSchema).optional()
+
+const timeBasedUrlSchema = z.
+    array(
+        z.object({
+                url:urlSchema,
+                startTime:z.string().datetime().nonempty(),
+                endTime:z.string().datetime().nonempty()
+            }
+        )
+    ).optional()
+
+const abtestingUrlSchema = z.
+    array(
+        z.object({
+            url:urlSchema,
+            weight:z.number().min(1).max(100)
+        })
+    )
+    .refine(
+        (urls) => urls.reduce( (sum,entry) => sum+entry.weight,0 ) === 100, 
+        {message:`Weights should always add upto 100!`}
+    )
+
 const urlValidationSchema = z.object({
-        originalUrl:z.string().nonempty().url(),
-        alias:z.string()
+        originalUrl:urlSchema,
+        alias:z.string().optional(),
+        regionBasedUrls:regionBasedUrlSchema,
+        timeBasedUrls:timeBasedUrlSchema,
+        abtestingUrls:abtestingUrlSchema
     }
 )
 

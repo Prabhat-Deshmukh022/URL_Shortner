@@ -85,4 +85,25 @@ const loginUser = async (c:Context) => {
     return c.json({ message: "Login successful!" }, 200);
 }
 
-export { registerUser,loginUser };
+const logoutUser = async (c:Context) => {
+
+    const user = c.get("userId")
+
+    if(!user){
+        console.log(`User not logged in!`);
+        return c.json({message:`User not logged in!`},401)
+    }
+
+    const option = {
+        path:'/',
+        httpOnly:true,
+        secure:true,
+        expires:new Date(0)
+    }
+
+    setCookie(c,"accesstoken","",option)
+
+    return c.json({message:`User ${user} logged out`},200)
+}
+
+export { registerUser,loginUser,logoutUser };

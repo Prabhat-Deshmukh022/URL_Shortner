@@ -23,11 +23,14 @@ model User {
 model Url{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   originalUrl String
-  shortenedUrl String @unique
+  shortenedCode String @unique
   expiresIn DateTime?
   alias String? @unique
   user User?   @relation(fields: [userId], references: [id]) // Link to user
   userId String? @db.ObjectId
+  regionBasedUrls Json?
+  timeBasedUrls Json?
+  abtestingUrls Json?
   clicks Click[]
   createdAt DateTime @default(now())
 }

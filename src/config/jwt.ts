@@ -17,7 +17,7 @@ function generateToken(userId: string): string {
     //@ts-ignore
     return jwt.sign(
         { 
-            userId 
+            userId:userId 
         }, 
         secret as string, 
         { 

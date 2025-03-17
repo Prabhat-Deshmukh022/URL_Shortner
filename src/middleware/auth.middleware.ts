@@ -27,7 +27,7 @@ async function userVerification(c:Context, next: () => Promise<void>){
         return c.res.statusText
     }
 
-    console.log(`user id is - ${user.id}`);
+    // console.log(`user id is - ${user.id}`);
 
     c.set("userId",user.id)
     return next()
